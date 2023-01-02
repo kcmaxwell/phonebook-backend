@@ -35,6 +35,18 @@ app.get("/api/persons", (req, res) => {
   res.json(persons);
 });
 
+// HTTP GET route for a single person
+app.get("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const person = persons.find((person) => person.id === id);
+
+  if (person) {
+    res.json(person);
+  } else {
+    res.status(404).end();
+  }
+});
+
 // HTTP GET route for info page
 app.get("/info", (req, res) => {
   res.send(infoPageCode);
