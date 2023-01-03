@@ -30,6 +30,10 @@ const infoPageCode = `<div><p>Phonebook has info for ${
   persons.length
 } people.</p><p>${new Date()}</p></div>`;
 
+const generateId = () => {
+  return Math.floor(Math.random() * 1000000000000);
+};
+
 // HTTP GET route for all persons
 app.get("/api/persons", (req, res) => {
   res.json(persons);
@@ -52,13 +56,37 @@ app.get("/info", (req, res) => {
   res.send(infoPageCode);
 });
 
-// HTTP DELETE route for a person resource
-app.delete("/api/persons/:id", (req, res) => {
-    const id = Number(req.params.id);
-    persons = persons.filter(person => person.id !== id)
+// HTTP POST route to add a person
+app.post("/api/persons", (req, res) => {
+  const body = req.body;
 
-    res.status(204).end();
-})
+  // if there is no content in the body, return 400 status code
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "content missing",
+    });
+  }
+
+  const newId = generateId();
+
+  const person = {
+    id: newId,
+    name: body.name,
+    number: body.number,
+  };
+
+  persons = persons.concat(person);
+
+  res.json(person);
+});
+
+// HTTP DELETE route for a person
+app.delete("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  persons = persons.filter((person) => person.id !== id);
+
+  res.status(204).end();
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
