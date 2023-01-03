@@ -69,10 +69,10 @@ app.post("/api/persons", (req, res) => {
   }
 
   // if the name already exists, return 400 status code
-  if (persons.find(person => person.name === body.name)) {
+  if (persons.find((person) => person.name === body.name)) {
     return response.status(400).json({
-        error: "name must be unique",
-    })
+      error: "name must be unique",
+    });
   }
 
   const newId = generateId();
