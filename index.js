@@ -1,7 +1,8 @@
-const { response } = require("express");
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 
+app.use(morgan("tiny"));
 app.use(express.json());
 
 let persons = [
@@ -63,14 +64,14 @@ app.post("/api/persons", (req, res) => {
 
   // if there is no content in the body, return 400 status code
   if (!body.name || !body.number) {
-    return response.status(400).json({
+    return res.status(400).json({
       error: "content missing",
     });
   }
 
   // if the name already exists, return 400 status code
   if (persons.find((person) => person.name === body.name)) {
-    return response.status(400).json({
+    return res.status(400).json({
       error: "name must be unique",
     });
   }
