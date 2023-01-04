@@ -1,12 +1,15 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const app = express();
 
+app.use(cors());
 app.use(express.json());
+/*
+// removed for fly.io
 morgan.token("post-data", (req) => {
   return JSON.stringify(req.body);
 });
-//app.use(morgan("tiny"));
 app.use(
   morgan("tiny", {
     skip: (req) => req.method === "POST",
@@ -20,6 +23,9 @@ app.use(
     }
   )
 );
+*/
+app.use(express.static('build'))
+
 
 let persons = [
   {
@@ -113,7 +119,7 @@ app.delete("/api/persons/:id", (req, res) => {
   res.status(204).end();
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
