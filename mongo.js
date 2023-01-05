@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-mongoose.set("strictQuery", true);
+mongoose.set('strictQuery', true);
 
 if (process.argv.length < 3) {
-  console.log("Please provide the password for MongoDB.");
+  console.log('Please provide the password for MongoDB.');
   process.exit(1);
 }
 
@@ -16,7 +16,7 @@ const personSchema = new mongoose.Schema({
   number: String,
 });
 
-const Person = mongoose.model("Person", personSchema);
+const Person = mongoose.model('Person', personSchema);
 
 // if there is enough arguments, add a new person
 if (process.argv.length === 5) {
@@ -25,24 +25,24 @@ if (process.argv.length === 5) {
 
   mongoose
     .connect(url)
-    .then((result) => {
+    .then(() => {
       const person = new Person({
-        name: name,
-        number: number,
+        name,
+        number,
       });
 
       return person.save();
     })
     .then(() => {
-      console.log("Added", name, "number", number, "to phonebook");
+      console.log('Added', name, 'number', number, 'to phonebook');
       return mongoose.connection.close();
     })
     .catch((err) => console.log(err));
 } else if (process.argv.length === 3) {
   // otherwise, print all entries in the phonebook
-  mongoose.connect(url).then((result) => {
+  mongoose.connect(url).then(() => {
     Person.find({}).then((persons) => {
-      console.log("phonebook:");
+      console.log('phonebook:');
       persons.forEach((person) => {
         console.log(person.name, person.number);
       });
@@ -51,5 +51,5 @@ if (process.argv.length === 5) {
     });
   });
 } else {
-  console.log("Please provide the correct arguments.");
+  console.log('Please provide the correct arguments.');
 }
